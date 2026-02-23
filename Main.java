@@ -44,6 +44,8 @@ public class Main {
         
         // Final verification: Sum of all balances should be 0.0
         // -10 (Ofek) - 35 (Asif) + 45 (Ori) = 0
+
+        tripManager.settleUp();
     }
 
     public static void printStatus(ExpenseManager group) {
