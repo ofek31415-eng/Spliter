@@ -1,50 +1,48 @@
 public class Main {
     public static void main(String[] args) {
-        Person[] group = new Person[3];
-
+        // 1. Initialize a group of 5 friends
+        Person[] group = new Person[5];
         group[0] = new Person("Ori");
         group[1] = new Person("Asif");
         group[2] = new Person("Ofek");
+        group[3] = new Person("Alon");
+        group[4] = new Person("Noam");
 
-        // 2. Create the manager for the trip
         ExpenseManager tripManager = new ExpenseManager(group);
 
-        System.out.println("--- Initial Status ---");
-        System.out.print(tripManager);
-
-        // 3. Scenario 1: General Expense
-        // Ori pays 90 for the whole group (30 each)
-        // Ori: +90 (payment) - 30 (share) = +60
-        // Asif: -30 (share) = -30
-        // Ofek: -30 (share) = -30
-        System.out.println("\n--- Ori paid 90 for everyone ---");
-        tripManager.addAmount("Ori", 90);
-        System.out.print(tripManager);
-
-        // 4. Scenario 2: Specific Participants
-        // Ofek pays 40 for a snack shared only with Asif
-        // Share is 40 / 2 = 20 each.
-        // Ofek: -30 (prev) + 40 (payment) - 20 (share) = -10
-        // Asif: -30 (prev) - 20 (share) = -50
-        // Ori: +60 (prev, did not participate) = +60
-        System.out.println("\n--- Ofek paid 40 for Asif and himself only ---");
-        String[] snackParticipants = {"Ofek", "Asif"};
-        tripManager.addAmount("Ofek", 40, snackParticipants);
-        System.out.print(tripManager);
-
-        // 5. Scenario 3: Payment for someone else
-        // Asif pays 15 for Ori's coffee (Asif did not drink)
-        // Share is 15 / 1 = 15.
-        // Asif: -50 (prev) + 15 (payment) = -35
-        // Ori: +60 (prev) - 15 (share) = +45
-        System.out.println("\n--- Asif paid 15 for Ori's coffee only ---");
-        String[] coffeeParticipant = {"Ori"};
-        tripManager.addAmount("Asif", 15, coffeeParticipant);
-        System.out.print(tripManager);
+        System.out.println("--- Starting Complex Settlement Test ---");
         
-        // Final verification: Sum of all balances should be 0.0
-        // -10 (Ofek) - 35 (Asif) + 45 (Ori) = 0
+        // 2. Expense 1: Ori pays 250 for the whole group (Dinner)
+        // Everyone owes 50. Ori should be +200.
+        System.out.println("Action: Ori paid 250 for everyone (Dinner)");
+        tripManager.addAmount("Ori", 250);
 
+        // 3. Expense 2: Alon pays 120 for (Alon, Noam, Ofek)
+        // Each of the three owes 40. Alon should get +80 back.
+        System.out.println("Action: Alon paid 120 for (Alon, Noam, Ofek) (Drinks)");
+        tripManager.addAmount("Alon", 120, new String[]{"Alon", "Noam", "Ofek"});
+
+        // 4. Expense 3: Noam pays 60 for (Noam, Asif, Ori)
+        // Each owes 20. Noam should get +40 back.
+        System.out.println("Action: Noam paid 60 for (Noam, Asif, Ori) (Taxi)");
+        tripManager.addAmount("Noam", 60, new String[]{"Noam", "Asif", "Ori"});
+
+        // 5. Expense 4: Ofek pays 100 only for Alon
+        // Ofek is +100, Alon is -100.
+        System.out.println("Action: Ofek paid 100 for Alon (Event Ticket)");
+        tripManager.addAmount("Ofek", 100, new String[]{"Alon"});
+
+        // 6. Expense 5: Asif pays 15 for (Asif, Noam)
+        // Each owes 7.5. Asif is +7.5.
+        System.out.println("Action: Asif paid 15 for (Asif, Noam) (Ice Cream)");
+        tripManager.addAmount("Asif", 15, new String[]{"Asif", "Noam"});
+
+        // Print status before settling
+        System.out.println("\n--- Final Balances Before Settlement ---");
+        System.out.print(tripManager);
+
+        // 7. Run the algorithm
+        // This should show the minimum number of transfers to reach balance 0
         tripManager.settleUp();
     }
 
