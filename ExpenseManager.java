@@ -8,14 +8,39 @@ public class ExpenseManager {
     public Person[] getArray() {
         return _group;
     }
-
-    public void addExpense(String name, double expense) {
-        double fixedExpense = - (expense / _group.length);
-
-        Person p = findPersonByName(_group, name);
-        p.changeBalance(expense);
+    /**
+     * Divides an amount between everyone in the group
+     * @param name
+     * @param amount
+     */
+    public void addAmount(String name, double amount) {
+        String[] allNames = new String[_group.length];
         for (int i = 0; i < _group.length; i++) {
-            _group[i].changeBalance(fixedExpense);
+            allNames[i] = _group[i].getName();
+        }
+        addAmount(name, amount, allNames);
+        // double fixedamount = - (amount / _group.length);
+
+        // Person p = findPersonByName(_group, name);
+        // p.changeBalance(amount);
+        // for (int i = 0; i < _group.length; i++) {
+        //     _group[i].changeBalance(fixedamount);
+        // }
+    }
+
+    /**
+     * Divides an amount between specific participants
+     * @param name
+     * @param amount
+     * @param participants
+     */
+    public void addAmount(String name, double amount, String[] participants) {
+        double fixedamount = - (amount / participants.length);
+
+        for (int i = 0; i < participants.length; i++) {
+            if (findPersonByName(_group, participants[i]) != null) {
+                _group[i].changeBalance(fixedamount);
+            }
         }
     }
 

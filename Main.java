@@ -8,7 +8,7 @@ public class Main {
 
         ExpenseManager bulgaria = new ExpenseManager(group);
         printStatus(bulgaria);
-        bulgaria.addExpense("Ori", 90);
+        bulgaria.addAmount("Ori", 90);
         printStatus(bulgaria);
     }
 
